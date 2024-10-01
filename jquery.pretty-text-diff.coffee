@@ -23,8 +23,8 @@ $.fn.extend
           original = $('<div />').html(settings.originalContent).text()
           changed = $('<div />').html(settings.changedContent).text()
         else
-          original = $(settings.originalContainer, this).text()
-          changed = $(settings.changedContainer, this).text()
+          original = $($(settings.originalContainer, this).prop('outerHTML')?.replace(/<br\s*\/?>/gi, '\n')).text()
+          changed = $($(settings.changedContainer, this).prop('outerHTML')?.replace(/<br\s*\/?>/gi, '\n')).text()
 
         $.fn.prettyTextDiff.debug "Original text found: ", original, settings
         $.fn.prettyTextDiff.debug "Changed  text found: ", changed, settings
@@ -35,8 +35,8 @@ $.fn.extend
         $.fn.prettyTextDiff.debug "Diffs: ", diffs, settings
 
         diff_as_html = $.map(diffs, (diff) ->
-          $.fn.prettyTextDiff.createHTML(diff))
-        $(settings.diffContainer, this).html(diff_as_html.join(''));
+          $.fn.prettyTextDiff.createHTML(diff)).join('').replace(/\n/g, '<br>')
+        $(settings.diffContainer, this).html(diff_as_html);
 
         @
 
